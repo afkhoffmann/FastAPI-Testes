@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "fastapi-testes"
+version = "0.1.0"
+description = ""
+authors = ["francisco.hoffmann <engenharia.franciscomartins@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = "^0.78.0"
+httpx = "^0.23.0"
+uvicorn = "^0.17.6"
+
+[tool.poetry.dev-dependencies]
+httpie = "^3.2.1"
+pytest = "^7.1.2"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
