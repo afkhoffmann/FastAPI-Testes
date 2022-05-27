@@ -10,3 +10,13 @@ class Item(BaseModel):
     image_url: str
     reference: str
     quantity: int
+
+
+# Torna explícito o retorno dos endpoint na documentação
+class HealthCheckResponse(BaseModel):
+    status: str
+
+
+# Padroniza os retornos de erro para a documentação
+class ErrorResponse(BaseModel):
+    message: str

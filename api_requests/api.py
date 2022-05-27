@@ -9,25 +9,37 @@ from fastapi.responses import JSONResponse
 from http import HTTPStatus
 from uuid import UUID
 from api_requests.exception import OrderNotFoundError, CommunicationError
-from api_requests.schema import Item
+from api_requests.schema import Item, HealthCheckResponse, ErrorResponse
 
+from api_requests.magalu_api import mgl_retrieve_items_by_order
 
 app = FastAPI()
 
 
 def retrieve_items_by_order(order_id: UUID) -> list[Item]:
-    pass
+    return mgl_retrieve_items_by_order(order_id)
 
 
-# Registro do endpoint /healthcheck
-@app.get("/healthcheck")
+# Registro do endpoint /healthcheck na tag "healthcheck"
+@app.get("/healthcheck", tags=["healthcheck"], summary="Integridade do sistema", response_model=HealthCheckResponse,
+         description="Verifica a integridade do sistema")
 async def healthcheck():
     return {"status": "ok"}
+
 
 # Cria uma injeção de dependência na rota abaixo. Permite mudar o recuperador de itens para um dublê nos testes e mudar
 # a maneira utilizada para recuperar os itens de um pedido sem precisar modificar todos os lugares que dependem da
 # função de recuperação de itens.
-@app.get("/orders/{order_id}/items")
+@app.get("/orders/{order_id}/items", tags=["orders"], summary="Itens de um pedido", response_model=list[Item],
+         description="Retorna todos os itens de um determinado pedido", responses={
+        HTTPStatus.NOT_FOUND.value: {
+            "description": "Pedido não encontrado",
+            "model": ErrorResponse,
+        },
+        HTTPStatus.BAD_GATEWAY.value: {
+            "description": "Falha de comunicação com o servidor remoto",
+            "model": ErrorResponse,
+        }})
 def list_items(items: list[Item] = Depends(retrieve_items_by_order)):
     return items
 
