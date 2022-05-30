@@ -2,8 +2,10 @@ import os
 from http import HTTPStatus
 from uuid import UUID
 
-# Httpx é um cliente HTTP completo, com suporte ao protocolo HTTP/2 e provê interface de programação síncrona e
-# assíncrona. Utilizado para fazer integração com serviços externos. Funções facilitam a criação de requisições HTTP.
+# Httpx é um cliente HTTP completo, com suporte ao protocolo HTTP/2 e
+# provê interface de programação síncrona e assíncrona. Utilizado para fazer
+# integração com serviços externos. Funções facilitam a criação de requisições
+# HTTP.
 import httpx
 
 from api_requests.exception import CommunicationError, OrderNotFoundError

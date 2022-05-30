@@ -1,19 +1,25 @@
-# isort é uma ferramenta que ordena de forma alfabética as importações, separando as bilbiotecas que são padrões da
-# linguagem, as externas ao sistema e as nativas do próprio sistema. O isort irá modificar o seu código ordenando as
-# importações alfabéticamente. Dessa forma, o bloco de importações fica organizado e padronizado no projeto.
+# isort é uma ferramenta que ordena de forma alfabética as importações,
+# separando as bilbiotecas que são padrões da linguagem, as externas ao
+# sistema e as nativas do próprio sistema. O isort irá modificar o seu
+# código ordenando as importações alfabéticamente. Dessa forma, o bloco
+# de importações fica organizado e padronizado no projeto.
 
-# O black é um formatador automático de código, ele irá modificar o seu código seguindo o guia de estilo do Python.
+# O black é um formatador automático de código, ele irá modificar o seu
+# código seguindo o guia de estilo do Python.
 
-# Httpie (http) é um cliente HTTP por linha de comando, usado para fazer testes de maneira simples.
+# Httpie (http) é um cliente HTTP por linha de comando, usado para fazer
+# testes de maneira simples.
 from http import HTTPStatus
 from uuid import UUID
 
-# Uvicorn é um servidor de aplicação com suporte a frameworks assíncronos, utilizado para rodar a aplicação tanto
-# na máquina quanto em um servidor de internet.
+# Uvicorn é um servidor de aplicação com suporte a frameworks assíncronos,
+# utilizado para rodar a aplicação tanto na máquina quanto em um servidor
+# de internet.
 import uvicorn
 
-# FastAPI é uma ferramenta para desenvolvimento web, possui funções que auxiliam operações de roteamento, tratamento de
-# requisições, renderização de conteúdo, gerenciamento de sessão e cookies, entre outros.
+# FastAPI é uma ferramenta para desenvolvimento web, possui funções que
+# auxiliam operações de roteamento, tratamento de requisições, renderização
+# de conteúdo, gerenciamento de sessão e cookies, entre outros.
 from fastapi import Depends, FastAPI, Request
 from fastapi.responses import JSONResponse
 
@@ -40,9 +46,10 @@ async def healthcheck():
     return {"status": "ok"}
 
 
-# Cria uma injeção de dependência na rota abaixo. Permite mudar o recuperador de itens para um dublê nos testes e mudar
-# a maneira utilizada para recuperar os itens de um pedido sem precisar modificar todos os lugares que dependem da
-# função de recuperação de itens.
+# Cria uma injeção de dependência na rota abaixo. Permite mudar o
+# recuperador de itens para um dublê nos testes e mudar a maneira utilizada
+# para recuperar os itens de um pedido sem precisar modificar todos os
+# lugares que dependem da função de recuperação de itens.
 @app.get(
     "/orders/{order_id}/items",
     tags=["orders"],
@@ -80,8 +87,8 @@ def handle_communication_error(request: Request, exc: CommunicationError):
     )
 
 
-# Inicia uvicorn direto da aplicação. "reload=True" atualiza a aplicação durante a execução sempre que houver alteração
-# no código.
+# Inicia uvicorn direto da aplicação. "reload=True" atualiza a aplicação
+# durante a execução sempre que houver alteração no código.
 def start():
     uvicorn.run("api_requests.api:app", host="0.0.0.0", port=8001, reload=True)
 

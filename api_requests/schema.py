@@ -1,5 +1,6 @@
-# Pydantic é um framework para validação de dados e gerenciamento de configurações. Facilita a identificação de erros.
-# Já possui integração com o FastAPI e é uma das ferramentas mais poderosas disponível.
+# Pydantic é um framework para validação de dados e gerenciamento de
+# configurações. Facilita a identificação de erros. Já possui integração
+# com o FastAPI e é uma das ferramentas mais poderosas disponível.
 from pydantic import BaseModel
 
 
