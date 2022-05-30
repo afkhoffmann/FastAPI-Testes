@@ -59,3 +59,11 @@ def mgl_retrieve_items_by_order(order_id: UUID) -> list[Item]:
         raise exc
     except httpx.HTTPError as exc:
         raise CommunicationError() from exc
+
+
+if __name__ == "__main__":
+    print(
+        mgl_retrieve_items_by_order(
+            UUID("efb77dcf-d83c-4935-81ac-7be5f37e6cdc")
+        )
+    )

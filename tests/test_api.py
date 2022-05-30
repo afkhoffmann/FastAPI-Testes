@@ -65,7 +65,7 @@ class TestListOrders:
         assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
 
     def test_order_id_not_found_return_error_message(
-            self, client, override_retrieve_items_by_order
+        self, client, override_retrieve_items_by_order
     ):
         override_retrieve_items_by_order(OrderNotFoundError())
         response = client.get(
@@ -74,7 +74,7 @@ class TestListOrders:
         assert response.status_code == HTTPStatus.NOT_FOUND
 
     def test_order_id_found_must_return_status_ok(
-            self, client, override_retrieve_items_by_order
+        self, client, override_retrieve_items_by_order
     ):
         override_retrieve_items_by_order([])
         response = client.get(
@@ -83,7 +83,7 @@ class TestListOrders:
         assert response.status_code == HTTPStatus.OK
 
     def test_order_id_found_must_return_items(
-            self, client, override_retrieve_items_by_order
+        self, client, override_retrieve_items_by_order
     ):
         order_items = [
             Item(
@@ -103,13 +103,15 @@ class TestListOrders:
         ]
         override_retrieve_items_by_order(order_items)
         response = client.get(
-            "/orders/7e290683-d67b-4f96-a940-44bef1f69d21/items")
+            "/orders/7e290683-d67b-4f96-a940-44bef1f69d21/items"
+        )
         assert response.json() == order_items
 
     def test_order_source_fail_must_return_error_message(
-            self, client, override_retrieve_items_by_order
+        self, client, override_retrieve_items_by_order
     ):
         override_retrieve_items_by_order(CommunicationError())
         response = client.get(
-            "/orders/ea78b59b-885d-4e7b-9cd0-d54acadb4933/items")
+            "/orders/ea78b59b-885d-4e7b-9cd0-d54acadb4933/items"
+        )
         assert response.status_code == HTTPStatus.BAD_GATEWAY
