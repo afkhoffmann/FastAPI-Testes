@@ -1,17 +1,25 @@
-# Uvicorn é um servidor de aplicação com suporte a frameworks assíncronos, utilizado para rodar a aplicação tanto
-# na máquina quanto em um servidor de internet.
-import uvicorn
-# FastAPI é uma ferramenta para desenvolvimento web, possui funções que auxiliam operações de roteamento, tratamento de
-# requisições, renderização de conteúdo, gerenciamento de sessão e cookies, entre outros.
-from fastapi import FastAPI, Depends, Request
-from fastapi.responses import JSONResponse
+# isort é uma ferramenta que ordena de forma alfabética as importações, separando as bilbiotecas que são padrões da
+# linguagem, as externas ao sistema e as nativas do próprio sistema. O isort irá modificar o seu código ordenando as
+# importações alfabéticamente. Dessa forma, o bloco de importações fica organizado e padronizado no projeto.
+
+# O black é um formatador automático de código, ele irá modificar o seu código seguindo o guia de estilo do Python.
+
 # Httpie (http) é um cliente HTTP por linha de comando, usado para fazer testes de maneira simples.
 from http import HTTPStatus
 from uuid import UUID
-from api_requests.exception import OrderNotFoundError, CommunicationError
-from api_requests.schema import Item, HealthCheckResponse, ErrorResponse
 
+# Uvicorn é um servidor de aplicação com suporte a frameworks assíncronos, utilizado para rodar a aplicação tanto
+# na máquina quanto em um servidor de internet.
+import uvicorn
+
+# FastAPI é uma ferramenta para desenvolvimento web, possui funções que auxiliam operações de roteamento, tratamento de
+# requisições, renderização de conteúdo, gerenciamento de sessão e cookies, entre outros.
+from fastapi import Depends, FastAPI, Request
+from fastapi.responses import JSONResponse
+
+from api_requests.exception import CommunicationError, OrderNotFoundError
 from api_requests.magalu_api import mgl_retrieve_items_by_order
+from api_requests.schema import ErrorResponse, HealthCheckResponse, Item
 
 app = FastAPI()
 
@@ -21,8 +29,13 @@ def retrieve_items_by_order(order_id: UUID) -> list[Item]:
 
 
 # Registro do endpoint /healthcheck na tag "healthcheck"
-@app.get("/healthcheck", tags=["healthcheck"], summary="Integridade do sistema", response_model=HealthCheckResponse,
-         description="Verifica a integridade do sistema")
+@app.get(
+    "/healthcheck",
+    tags=["healthcheck"],
+    summary="Integridade do sistema",
+    response_model=HealthCheckResponse,
+    description="Verifica a integridade do sistema",
+)
 async def healthcheck():
     return {"status": "ok"}
 
@@ -30,8 +43,13 @@ async def healthcheck():
 # Cria uma injeção de dependência na rota abaixo. Permite mudar o recuperador de itens para um dublê nos testes e mudar
 # a maneira utilizada para recuperar os itens de um pedido sem precisar modificar todos os lugares que dependem da
 # função de recuperação de itens.
-@app.get("/orders/{order_id}/items", tags=["orders"], summary="Itens de um pedido", response_model=list[Item],
-         description="Retorna todos os itens de um determinado pedido", responses={
+@app.get(
+    "/orders/{order_id}/items",
+    tags=["orders"],
+    summary="Itens de um pedido",
+    response_model=list[Item],
+    description="Retorna todos os itens de um determinado pedido",
+    responses={
         HTTPStatus.NOT_FOUND.value: {
             "description": "Pedido não encontrado",
             "model": ErrorResponse,
@@ -39,7 +57,9 @@ async def healthcheck():
         HTTPStatus.BAD_GATEWAY.value: {
             "description": "Falha de comunicação com o servidor remoto",
             "model": ErrorResponse,
-        }})
+        },
+    },
+)
 def list_items(items: list[Item] = Depends(retrieve_items_by_order)):
     return items
 

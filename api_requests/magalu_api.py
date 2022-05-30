@@ -1,12 +1,13 @@
-from http import HTTPStatus
 import os
+from http import HTTPStatus
 from uuid import UUID
-from api_requests.schema import Item
-from api_requests.exception import OrderNotFoundError, CommunicationError
 
 # Httpx é um cliente HTTP completo, com suporte ao protocolo HTTP/2 e provê interface de programação síncrona e
 # assíncrona. Utilizado para fazer integração com serviços externos. Funções facilitam a criação de requisições HTTP.
 import httpx
+
+from api_requests.exception import CommunicationError, OrderNotFoundError
+from api_requests.schema import Item
 
 # TENANT_ID e APIKEY fixos somente para demonstrações.
 APIKEY = os.environ.get("APIKEY", "5734143a-595d-405d-9c97-6c198537108f")
@@ -47,9 +48,7 @@ def mgl_retrieve_items_by_order(order_id: UUID) -> list[Item]:
         packages = response.json()["packages"]
         items = []
         for package in packages:
-            items.extend(
-                _retrieve_items_by_package(order_id, package["uuid"])
-            )
+            items.extend(_retrieve_items_by_package(order_id, package["uuid"]))
         return items
     except httpx.HTTPStatusError as exc:
         # Aqui poderiam ser tratados outros erros como autenticação.
